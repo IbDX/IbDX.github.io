@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>حاسبة المعدل التراكمي - محمد</title>
+  <style>
+    body { font-family: 'Arial'; padding: 20px; background: #f4f4f4; direction: rtl; }
+    h1 { text-align: center; }
+    label { display: block; margin-top: 10px; }
+    input { margin: 5px 0; padding: 5px; width: 100%; }
+    button { margin-top: 20px; padding: 10px; width: 100%; background: #007bff; color: white; border: none; font-weight: bold; }
+    .result { margin-top: 20px; background: white; padding: 15px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+
+<h1>حاسبة المعدل التراكمي - الجامعة الأردنية</h1>
+
+<div id="form">
+  <p>ادخل المعدل وعدد الساعات لكل سنة (يمكنك تعبئة من سنة أولى لرابعة فقط)</p>
+
+  <div id="inputs"></div>
+
+  <label><input type="checkbox" id="useCredits" checked> استخدم عدد الساعات بدلاً من النسب</label>
+
+  <button onclick="calculate()">احسب المعدل</button>
+
+  <div class="result" id="output"></div>
+</div>
+
+<script>
+  const years = [
+    { name: "سنة أولى", key: "year1", percent: 0.15 },
+    { name: "سنة ثانية", key: "year2", percent: 0.17 },
+    { name: "سنة ثالثة", key: "year3", percent: 0.17 },
+    { name: "سنة رابعة", key: "year4", percent: 0.17 },
+    { name: "سنة خامسة", key: "year5", percent: 0.17 },
+    { name: "سنة سادسة", key: "year6", percent: 0.17 },
+  ];
+
+  const container = document.getElementById("inputs");
+  years.forEach((year, i) => {
+    container.innerHTML += `
+      <label><b>${year.name}</b></label>
+      <input type="number" id="gpa_${i}" placeholder="المعدل (مثلاً 3.82)" step="0.01">
+      <input type="number" id="hours_${i}" placeholder="عدد الساعات" step="1">
+    `;
+  });
+
+  function calculate() {
+    let totalPoints = 0, totalWeight = 0, creditPoints = 0, creditHours = 0;
+    const useCredits = document.getElementById("useCredits").checked;
+
+    years.forEach((year, i) => {
+      const gpa = parseFloat(document.getElementById(`gpa_${i}`).value);
+      const hours = parseFloat(document.getElementById(`hours_${i}`).value);
+
+      if (!isNaN(gpa) && !isNaN(hours)) {
+        if (useCredits) {
+          creditPoints += gpa * hours;
+          creditHours += hours;
+        } else {
+          totalPoints += gpa * year.percent;
+          totalWeight += year.percent;
+        }
+      }
+    });
+
+    let finalGPA = useCredits ? (creditPoints / creditHours) : (totalPoints / totalWeight);
+    finalGPA = Math.round(finalGPA * 1000) / 1000;
+
+    let residencyScore = Math.round((finalGPA / 4.0) * 30 * 100) / 100;
+    let diffFromHonors = Math.round((3.65 - finalGPA) * 1000) / 1000;
+
+    let msg = `<h3>📊 النتيجة:</h3>
+      <p>المعدل التراكمي: <b>${finalGPA}</b></p>
+      <p>علامتك في بند المعدل للإقامة (من 30): <b>${residencyScore}</b></p>`;
+
+    if (finalGPA >= 3.65) {
+      msg += `<p style="color:green;">🎉 مبروك! أنت في فئة الامتياز.</p>`;
+    } else {
+      msg += `<p style="color:red;">⚠️ ينقصك ${diffFromHonors} للوصول إلى الامتياز (3.65).</p>`;
+    }
+
+    document.getElementById("output").innerHTML = msg;
+  }
+</script>
+
+</body>
+</html>
