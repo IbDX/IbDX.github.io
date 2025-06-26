@@ -137,14 +137,43 @@
 
   const container = document.getElementById("inputs");
 
-  years.forEach((year, i) => {
+   {
     container.innerHTML += `
-      <div class="year-block">
-        <label>${year.name}</label>
-        <input type="number" id="gpa_${i}" placeholder="المعدل (مثلاً 3.85)" step="0.01">
-        <input type="number" id="hours_${i}" placeholder="عدد الساعات (مثلاً 34)" step="1">
-      </div>
-    `;
+    <div class="year-block">
+  <label>سنة أولى</label>
+  <input type="number" id="gpa_0" placeholder="المعدل (مثلاً 3.85)" step="0.01">
+  <input type="number" id="hours_0" value="60" step="1">
+</div>
+
+<div class="year-block">
+  <label>سنة ثانية</label>
+  <input type="number" id="gpa_1" placeholder="المعدل (مثلاً 3.85)" step="0.01">
+  <input type="number" id="hours_1" value="34" step="1">
+</div>
+
+<div class="year-block">
+  <label>سنة ثالثة</label>
+  <input type="number" id="gpa_2" placeholder="المعدل (مثلاً 3.85)" step="0.01">
+  <input type="number" id="hours_2" value="33" step="1">
+</div>
+
+<div class="year-block">
+  <label>سنة رابعة</label>
+  <input type="number" id="gpa_3" placeholder="المعدل (مثلاً 3.85)" step="0.01">
+  <input type="number" id="hours_3" value="40" step="1">
+</div>
+
+<div class="year-block">
+  <label>سنة خامسة</label>
+  <input type="number" id="gpa_4" placeholder="المعدل (مثلاً 3.85)" step="0.01">
+  <input type="number" id="hours_4" value="47" step="1">
+</div>
+
+<div class="year-block">
+  <label>سنة سادسة</label>
+  <input type="number" id="gpa_5" placeholder="المعدل (مثلاً 3.85)" step="0.01">
+  <input type="number" id="hours_5" value="42" step="1">
+</div>`;
   });
 
   function calculate() {
