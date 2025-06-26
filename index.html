@@ -65,14 +65,14 @@
       margin-left: 5px;
     }
     button {
-      margin-top: 25px;
-      padding: 15px;
+      margin-top: 15px;
+      padding: 12px;
       background: #2980b9;
       color: white;
       font-size: 16px;
       border: none;
       border-radius: 8px;
-      width: 100%;
+      width: auto;
       cursor: pointer;
       transition: background 0.3s ease;
     }
@@ -105,20 +105,46 @@
 </header>
 
 <div class="container">
-  <p>املأ المعلومات التالية لحساب معدلك التراكمي:</p>
+  <div style="text-align: center; margin-bottom: 20px;">
+    <button onclick="showTab('mainTab')">الحاسبة الرئيسية</button>
+    <button onclick="showTab('yearOneTab')">حساب سنة أولى</button>
+  </div>
 
-  <form id="calcForm">
-    <div id="inputs"></div>
+  <!-- تبويب حساب سنة أولى -->
+  <div id="yearOneTab" style="display: none;">
+    <h3>احسب معدل سنة أولى</h3>
+    <label>الفصل الأول:</label>
+    <input type="number" id="y1_term1_gpa" placeholder="المعدل" step="0.01">
+    <input type="number" id="y1_term1_hours" placeholder="الساعات" step="1">
 
-    <label>
-      <input type="checkbox" id="useCredits" checked>
-      استخدم عدد الساعات بدل النسب الرسمية
-    </label>
+    <label>الفصل الثاني:</label>
+    <input type="number" id="y1_term2_gpa" placeholder="المعدل" step="0.01">
+    <input type="number" id="y1_term2_hours" placeholder="الساعات" step="1">
 
-    <button type="button" onclick="calculate()">احسب المعدل</button>
-  </form>
+    <label>الفصل الصيفي:</label>
+    <input type="number" id="y1_summer_gpa" placeholder="المعدل" step="0.01">
+    <input type="number" id="y1_summer_hours" placeholder="الساعات" step="1">
 
-  <div class="result" id="output"></div>
+    <button onclick="calcYearOne()">احسب معدل سنة أولى</button>
+
+    <div id="yearOneResult" class="result"></div>
+  </div>
+
+  <!-- تبويب الحاسبة الرئيسية -->
+  <div id="mainTab">
+    <p>املأ المعلومات التالية لحساب معدلك التراكمي:</p>
+    <form id="calcForm">
+      <div id="inputs"></div>
+
+      <label>
+        <input type="checkbox" id="useCredits" checked>
+        استخدم عدد الساعات بدل النسب الرسمية
+      </label>
+
+      <button type="button" onclick="calculate()">احسب المعدل</button>
+    </form>
+    <div class="result" id="output"></div>
+  </div>
 </div>
 
 <footer>
@@ -137,16 +163,55 @@
 
   const container = document.getElementById("inputs");
 
-   years.forEach((year, i) => {
-  container.innerHTML += `
-    <div class="year-block">
-      <label>${year.name}</label>
-      <input type="number" id="gpa_${i}" placeholder="المعدل (مثلاً 3.85)" step="0.01">
-      <input type="number" id="hours_${i}"  placeholder="الساعات" value="${[60,34,33,40,47,42][i]}" step="1">
-    </div>
-  `;
-});
+  years.forEach((year, i) => {
+    container.innerHTML += `
+      <div class="year-block">
+        <label>${year.name}</label>
+        <input type="number" id="gpa_${i}" placeholder="المعدل (مثلاً 3.85)" step="0.01">
+        <input type="number" id="hours_${i}"  placeholder="الساعات" ${i === 0 ? '' : `value="${[60,34,33,40,47,42][i]}"`} step="1">
+      </div>
+    `;
+  });
 
+  function showTab(tabId) {
+    document.getElementById("mainTab").style.display = "none";
+    document.getElementById("yearOneTab").style.display = "none";
+    document.getElementById(tabId).style.display = "block";
+  }
+
+  function calcYearOne() {
+    const terms = [
+      { gpa: parseFloat(document.getElementById("y1_term1_gpa").value), hours: parseFloat(document.getElementById("y1_term1_hours").value) },
+      { gpa: parseFloat(document.getElementById("y1_term2_gpa").value), hours: parseFloat(document.getElementById("y1_term2_hours").value) },
+      { gpa: parseFloat(document.getElementById("y1_summer_gpa").value), hours: parseFloat(document.getElementById("y1_summer_hours").value) },
+    ];
+
+    let totalPoints = 0, totalHours = 0;
+
+    terms.forEach(term => {
+      if (!isNaN(term.gpa) && !isNaN(term.hours)) {
+        totalPoints += term.gpa * term.hours;
+        totalHours += term.hours;
+      }
+    });
+
+    if (totalHours === 0) {
+      document.getElementById("yearOneResult").innerHTML = `<p class="red">يرجى تعبئة المعدلات والساعات.</p>`;
+      return;
+    }
+
+    const avg = Math.round((totalPoints / totalHours) * 1000) / 1000;
+
+    document.getElementById("yearOneResult").innerHTML = `
+      <p><strong>معدل سنة أولى:</strong> ${avg}</p>
+      <p><strong>مجموع الساعات:</strong> ${totalHours}</p>
+      <p>تم إدراج القيم تلقائياً في الحاسبة الرئيسية.</p>
+    `;
+
+    // تعبئة الحاسبة الرئيسية مباشرةً
+    document.getElementById("gpa_0").value = avg;
+    document.getElementById("hours_0").value = totalHours;
+  }
 
   function calculate() {
     let useCredits = document.getElementById("useCredits").checked;
