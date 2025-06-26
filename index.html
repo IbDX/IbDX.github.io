@@ -153,8 +153,8 @@
     let totalCredits = 0, creditPoints = 0;
 
     years.forEach((year, i) => {
-      const gpa = parseFloat(document.getElementById(gpa_${i}).value);
-      const hours = parseFloat(document.getElementById(hours_${i}).value);
+      const gpa = parseFloat(document.getElementById(`gpa_${i}`).value);
+      const hours = parseFloat(document.getElementById(`hours_${i}`).value);
 
       if (!isNaN(gpa) && !isNaN(hours)) {
         if (useCredits) {
@@ -173,13 +173,13 @@
     const residencyScore = Math.round((finalGPA / 4.0) * 30 * 100) / 100;
     const diff = Math.round((3.65 - finalGPA) * 1000) / 1000;
 
-    let message = <p>📘 <strong>المعدل التراكمي:</strong> ${finalGPA}</p>;
-    message += <p>🎯 <strong>علامتك في بند المعدل (من 30):</strong> ${residencyScore}</p>;
+    let message = `<p>📘 <strong>المعدل التراكمي:</strong> ${finalGPA}</p>`;
+    message += `<p>🎯 <strong>علامتك في بند المعدل (من 30):</strong> ${residencyScore}</p>`;
 
     if (finalGPA >= 3.65) {
-      message += <p class="green">🎉 مبروك، أنت ضمن فئة الامتياز!</p>;
+      message += `<p class="green">🎉 مبروك، أنت ضمن فئة الامتياز!</p>`;
     } else {
-      message += <p class="red">⚠ ينقصك ${diff} للوصول إلى الامتياز (3.65).</p>;
+      message += `<p class="red">⚠ ينقصك ${diff} للوصول إلى الامتياز (3.65).</p>`;
     }
 
     document.getElementById("output").innerHTML = message;
