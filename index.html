@@ -1,64 +1,151 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>حاسبة المعدل التراكمي - محمد</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>حاسبة المعدل التراكمي - الجامعة الأردنية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Arial'; padding: 20px; background: #f4f4f4; direction: rtl; }
-    h1 { text-align: center; }
-    label { display: block; margin-top: 10px; }
-    input { margin: 5px 0; padding: 5px; width: 100%; }
-    button { margin-top: 20px; padding: 10px; width: 100%; background: #007bff; color: white; border: none; font-weight: bold; }
-    .result { margin-top: 20px; background: white; padding: 15px; border-radius: 5px; }
+    body {
+      font-family: 'Cairo', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #f7f8fc, #eef1f6);
+      color: #333;
+    }
+    header {
+      background: #2c3e50;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+    header p {
+      margin-top: 5px;
+      font-size: 16px;
+      color: #ddd;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      padding: 30px;
+      background: white;
+      margin-top: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    input {
+      padding: 10px;
+      margin-top: 5px;
+      width: 100%;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    input[type="checkbox"] {
+      width: auto;
+    }
+    button {
+      margin-top: 25px;
+      padding: 15px;
+      background: #2980b9;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      width: 100%;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #1f6391;
+    }
+    .result {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f1f1f1;
+      border-radius: 8px;
+      font-size: 18px;
+    }
+    .green { color: green; }
+    .red { color: red; }
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-bottom: 20px;
+      font-size: 14px;
+      color: #999;
+    }
   </style>
 </head>
 <body>
 
-<h1>حاسبة المعدل التراكمي - الجامعة الأردنية</h1>
+<header>
+  <h1>حاسبة المعدل التراكمي - الجامعة الأردنية</h1>
+  <p>By Mohammad Khattab</p>
+</header>
 
-<div id="form">
-  <p>ادخل المعدل وعدد الساعات لكل سنة (يمكنك تعبئة من سنة أولى لرابعة فقط)</p>
+<div class="container">
+  <p>املأ المعلومات التالية لحساب معدلك التراكمي بدقة:</p>
 
   <div id="inputs"></div>
 
-  <label><input type="checkbox" id="useCredits" checked> استخدم عدد الساعات بدلاً من النسب</label>
+  <label>
+    <input type="checkbox" id="useCredits" checked>
+    استخدم عدد الساعات بدلاً من النسب الرسمية
+  </label>
 
   <button onclick="calculate()">احسب المعدل</button>
 
   <div class="result" id="output"></div>
 </div>
 
+<footer>
+  &copy; 2025 جميع الحقوق محفوظة
+</footer>
+
 <script>
   const years = [
-    { name: "سنة أولى", key: "year1", percent: 0.15 },
-    { name: "سنة ثانية", key: "year2", percent: 0.17 },
-    { name: "سنة ثالثة", key: "year3", percent: 0.17 },
-    { name: "سنة رابعة", key: "year4", percent: 0.17 },
-    { name: "سنة خامسة", key: "year5", percent: 0.17 },
-    { name: "سنة سادسة", key: "year6", percent: 0.17 },
+    { name: "سنة أولى", percent: 0.15 },
+    { name: "سنة ثانية", percent: 0.17 },
+    { name: "سنة ثالثة", percent: 0.17 },
+    { name: "سنة رابعة", percent: 0.17 },
+    { name: "سنة خامسة", percent: 0.17 },
+    { name: "سنة سادسة", percent: 0.17 },
   ];
 
   const container = document.getElementById("inputs");
   years.forEach((year, i) => {
     container.innerHTML += `
-      <label><b>${year.name}</b></label>
-      <input type="number" id="gpa_${i}" placeholder="المعدل (مثلاً 3.82)" step="0.01">
-      <input type="number" id="hours_${i}" placeholder="عدد الساعات" step="1">
+      <label>${year.name}</label>
+      <input type="number" id="gpa_${i}" placeholder="المعدل (مثلاً 3.87)" step="0.01">
+      <input type="number" id="hours_${i}" placeholder="عدد الساعات (مثلاً 34)" step="1">
     `;
   });
 
   function calculate() {
-    let totalPoints = 0, totalWeight = 0, creditPoints = 0, creditHours = 0;
-    const useCredits = document.getElementById("useCredits").checked;
+    let useCredits = document.getElementById("useCredits").checked;
+    let totalPoints = 0, totalWeight = 0;
+    let totalCredits = 0, creditPoints = 0;
 
     years.forEach((year, i) => {
-      const gpa = parseFloat(document.getElementById(`gpa_${i}`).value);
-      const hours = parseFloat(document.getElementById(`hours_${i}`).value);
+      const gpa = parseFloat(document.getElementById(gpa_${i}).value);
+      const hours = parseFloat(document.getElementById(hours_${i}).value);
 
       if (!isNaN(gpa) && !isNaN(hours)) {
         if (useCredits) {
           creditPoints += gpa * hours;
-          creditHours += hours;
+          totalCredits += hours;
         } else {
           totalPoints += gpa * year.percent;
           totalWeight += year.percent;
@@ -66,23 +153,22 @@
       }
     });
 
-    let finalGPA = useCredits ? (creditPoints / creditHours) : (totalPoints / totalWeight);
+    let finalGPA = useCredits ? (creditPoints / totalCredits) : (totalPoints / totalWeight);
     finalGPA = Math.round(finalGPA * 1000) / 1000;
 
-    let residencyScore = Math.round((finalGPA / 4.0) * 30 * 100) / 100;
-    let diffFromHonors = Math.round((3.65 - finalGPA) * 1000) / 1000;
+    const residencyScore = Math.round((finalGPA / 4.0) * 30 * 100) / 100;
+    const diff = Math.round((3.65 - finalGPA) * 1000) / 1000;
 
-    let msg = `<h3>📊 النتيجة:</h3>
-      <p>المعدل التراكمي: <b>${finalGPA}</b></p>
-      <p>علامتك في بند المعدل للإقامة (من 30): <b>${residencyScore}</b></p>`;
+    let message = <p>المعدل التراكمي: <b>${finalGPA}</b></p>;
+    message += <p>علامتك في بند المعدل (من 30): <b>${residencyScore}</b></p>;
 
     if (finalGPA >= 3.65) {
-      msg += `<p style="color:green;">🎉 مبروك! أنت في فئة الامتياز.</p>`;
+      message += <p class="green">🎉 مبروك، أنت ضمن فئة الامتياز!</p>;
     } else {
-      msg += `<p style="color:red;">⚠️ ينقصك ${diffFromHonors} للوصول إلى الامتياز (3.65).</p>`;
+      message += <p class="red">⚠ ينقصك ${diff} للوصول إلى الامتياز (3.65).</p>;
     }
 
-    document.getElementById("output").innerHTML = msg;
+    document.getElementById("output").innerHTML = message;
   }
 </script>
 
