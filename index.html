@@ -110,7 +110,6 @@
     <button onclick="showTab('yearOneTab')">حساب سنة أولى</button>
   </div>
 
-  <!-- تبويب حساب سنة أولى -->
   <div id="yearOneTab" style="display: none;">
     <h3>احسب معدل سنة أولى</h3>
     <label>الفصل الأول:</label>
@@ -130,7 +129,6 @@
     <div id="yearOneResult" class="result"></div>
   </div>
 
-  <!-- تبويب الحاسبة الرئيسية -->
   <div id="mainTab">
     <p>املأ المعلومات التالية لحساب معدلك التراكمي:</p>
     <form id="calcForm">
@@ -208,7 +206,6 @@
       <p>تم إدراج القيم تلقائياً في الحاسبة الرئيسية.</p>
     `;
 
-    // تعبئة الحاسبة الرئيسية مباشرةً
     document.getElementById("gpa_0").value = avg;
     document.getElementById("hours_0").value = totalHours;
   }
@@ -233,14 +230,18 @@
       }
     });
 
-    let finalGPA = useCredits ? (creditPoints / totalCredits) : (totalPoints / totalWeight);
-    finalGPA = Math.round(finalGPA * 1000) / 1000;
+    let rawGPA = useCredits ? (creditPoints / totalCredits) : (totalPoints / totalWeight);
+    let finalGPA = Math.round(rawGPA * 1000) / 1000;
+    let roundedGPA = Math.round(rawGPA * 100) / 100;
 
-    const residencyScore = Math.round((finalGPA / 4.0) * 30 * 100) / 100;
+    let rawResidency = (rawGPA / 4.0) * 30;
+    let residencyScore = Math.round(rawResidency * 100) / 100;
+    let roundedResidency = Math.round(rawResidency * 100) / 100;
+
     const diff = Math.round((3.65 - finalGPA) * 1000) / 1000;
 
-    let message = `<p>📘 <strong>المعدل التراكمي:</strong> ${finalGPA}</p>`;
-    message += `<p>🎯 <strong>علامة الاقامة (من 30):</strong> ${residencyScore}</p>`;
+    let message = `<p>📘 <strong>المعدل التراكمي:</strong> ${finalGPA} <span style="color:#777;">(${roundedGPA.toFixed(2)})</span></p>`;
+    message += `<p>🎯 <strong>علامة الاقامة (من 30):</strong> ${residencyScore} <span style="color:#777;">(${roundedResidency.toFixed(2)})</span></p>`;
 
     if (finalGPA >= 3.65) {
       message += `<p class="green">🎉 مبروك، أنت ضمن فئة الامتياز!</p>`;
