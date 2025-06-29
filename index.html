@@ -146,10 +146,7 @@
     <form id="calcForm">
       <div id="inputs"></div>
 
-      <label>
-        <input type="checkbox" id="useCredits" checked>
-        استخدم عدد الساعات بدل النسب الرسمية
-      </label>
+    
 
       <button type="button" onclick="calculate()">احسب المعدل</button>
     </form>
@@ -223,7 +220,7 @@
   }
 
   function calculate() {
-    let useCredits = document.getElementById("useCredits").checked;
+    
     let totalPoints = 0, totalWeight = 0;
     let totalCredits = 0, creditPoints = 0;
 
@@ -232,17 +229,14 @@
       const hours = parseFloat(document.getElementById(`hours_${i}`).value);
 
       if (!isNaN(gpa) && !isNaN(hours)) {
-        if (useCredits) {
-          creditPoints += gpa * hours;
-          totalCredits += hours;
-        } else {
+       
           totalPoints += gpa * year.percent;
           totalWeight += year.percent;
-        }
+        
       }
     });
 
-    let rawGPA = useCredits ? (creditPoints / totalCredits) : (totalPoints / totalWeight);
+    let rawGPA =(totalPoints / totalWeight);
     let finalGPA = Math.round(rawGPA * 1000) / 1000;
     let roundedGPA = Math.round(rawGPA * 100) / 100;
 
