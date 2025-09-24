@@ -247,7 +247,7 @@
     const diff = Math.round((3.65 - finalGPA) * 1000) / 1000;
 
     let message = `<p>📘 <strong>المعدل التراكمي:</strong> ${finalGPA} <span style="color:#777;">(${roundedGPA.toFixed(2)})</span></p>`;
-    message += `<p>🎯 <strong>علامة الاقامة (من 30):</strong> ${residencyScore} <span style="color:#777;">(${roundedResidency.toFixed(2)})</span></p>`;
+    message += `<p>🎯 <strong>نقاط الاقامة (من 30):</strong> ${residencyScore} <span style="color:#777;">(${roundedResidency.toFixed(2)})</span></p>`;
 
     if (finalGPA >= 3.65) {
       message += `<p class="green">🎉 مبروك، أنت ضمن فئة الامتياز!</p>`;
@@ -261,3 +261,4 @@
 
 </body>
 </html>
+
